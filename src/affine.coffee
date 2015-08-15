@@ -64,8 +64,8 @@ class affine2d
       " #{@m11.toPrecision(3)}]   V = (" +
        "#{@v0.toPrecision(3)}, " +
       " #{@v1.toPrecision(3)})   scale = " +
-      @getXScale().toPrecision(3) + " x " + 
-      @getYScale().toPrecision(3)
+      @getXCenter().toPrecision(3) + " x " + 
+      @getYCenter().toPrecision(3)
 
   copy: -> new affine2d @
 
@@ -91,10 +91,7 @@ class affine2d
 
   transformVec: (a) ->
     # transforms a 2-item array in place
-    t0 = @m00 * a[0] + @m01 * a[1] + @v0
-    t1 = @m10 * a[0] + @m11 * a[1] + @v1
-    a[0] = t0
-    a[1] = t1
+    @transformPair(a[0], a[1])
 
   rightComposeWith: (a) ->
     ###
