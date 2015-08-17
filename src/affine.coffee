@@ -10,7 +10,7 @@
 # which executes like this:
 #
 # [ px' ]   [ M00 M01 ]   [ px ]   [ v0 ]
-# [     ] = [         ] * [    ] + [    ] 
+# [     ] = [         ] * [    ] + [    ]
 # [ py' ]   [ M10 M11 ]   [ py ]   [ v1 ]
 #
 # Commonly we represent the transformation as one matrix, like this:
@@ -64,7 +64,7 @@ class affine2d
       " #{@m11.toPrecision(3)}]   V = (" +
        "#{@v0.toPrecision(3)}, " +
       " #{@v1.toPrecision(3)})   scale = " +
-      @getXCenter().toPrecision(3) + " x " + 
+      @getXCenter().toPrecision(3) + " x " +
       @getYCenter().toPrecision(3)
 
   copy: -> new affine2d @
@@ -91,15 +91,19 @@ class affine2d
 
   transformVec: (a) ->
     # transforms a 2-item array in place
-    @transformPair(a[0], a[1])
+    t0 = @m00 * a[0] + @m01 * a[1] + @v0
+    t1 = @m10 * a[0] + @m11 * a[1] + @v1
+    a[0] = t0
+    a[1] = t1
+    a
 
   rightComposeWith: (a) ->
     ###
-    Typically when you have an affine A and you want to 
+    Typically when you have an affine A and you want to
     perform another affine on it, use this.
     In other words:
       A.rightComposeWith(B)
-      performs the composition B(A) and replaces A with the results.    
+      performs the composition B(A) and replaces A with the results.
     ###
     t_m10 = a.m00 * @m10 + a.m10 * @m11
     t_m11 = a.m01 * @m10 + a.m11 * @m11
@@ -160,7 +164,7 @@ class affine2d
     ]
 
   toPosRotScale: ->
-    ###    
+    ###
     this only makes sense if you know your affine only consists
     of a position, rotation, and scaling (i.e., no shearing).
 
@@ -172,7 +176,7 @@ class affine2d
       - no shearing
       - they're applied in the above order, which is a natural way of thinking of thinking of object placement
     Note that you can then extract the pos, rot, and scaling from a posRotScale (or modified one)
-    by using super's toPosRotScale function 
+    by using super's toPosRotScale function
     ###
 
     xscale = Math.sqrt (@m00 * @m00 + @m10 * @m10)
@@ -248,7 +252,7 @@ class posRotScale extends affine2d
     - no shearing
     - they're applied in the above order, which is a natural way of thinking of thinking of object placement
   Note that you can then extract the pos, rot, and scaling from a posRotScale (or modified one)
-  by using super's toPosRotScale function 
+  by using super's toPosRotScale function
   ###
   constructor: ({pos, rot, scale})->
     super()
